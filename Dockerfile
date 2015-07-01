@@ -1,5 +1,5 @@
-## -*- docker-image-name: "armbuild/scw-app-openproject:latest" -*-
-FROM armbuild/scw-distrib-ubuntu:trusty
+## -*- docker-image-name: "armbuild/scw-app-ampache:latest" -*-
+FROM armbuild/scw-distrib-ubuntu:vivid
 MAINTAINER Scaleway <opensource@scaleway.com> (@scaleway)
 
 
@@ -10,7 +10,13 @@ RUN /usr/local/sbin/builder-enter
 # Install packages
 RUN apt-get -q update \
  && apt-get -y -q upgrade \
- && apt-get install -y -q ampache ampache-themes
+ && apt-get install -y -q \
+    ampache \
+    ampache-themes \
+    mysql-server
+
+
+RUN systemctl enable mysql
 
 
 # Use a dedicated vhost instead of a conf
