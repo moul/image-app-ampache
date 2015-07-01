@@ -10,6 +10,13 @@ RUN /usr/local/sbin/builder-enter
 # Install packages
 RUN apt-get -q update \
  && apt-get -y -q upgrade \
+ && apt-get install -y -q ampache ampache-themes
+
+
+# Patches
+ADD patches/etc/ /etc/
+ADD patches/usr/ /usr/
+ADD patches/root/ /root/
 
 
 # Clean rootfs from image-builder

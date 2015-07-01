@@ -1,0 +1,10 @@
+Hi Cloud Rider,
+
+Welcome to the Ampache image.
+
+The MySQL credentials are:
+
+- login: root 
+- password: {mysql_root_password}
+
+Enjoy!
