@@ -13,6 +13,10 @@ RUN apt-get -q update \
  && apt-get install -y -q ampache ampache-themes
 
 
+# Use a dedicated vhost instead of a conf
+RUN a2disconf ampache
+
+
 # Patches
 ADD patches/etc/ /etc/
 ADD patches/usr/ /usr/
