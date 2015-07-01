@@ -6,15 +6,31 @@
 export DEBIAN_FRONTEND=noninteractive
 
 MYSQL_ROOT_PASSWORD=$(head /dev/urandom -c 512 | sha1sum | awk '// { print $1; }')
+MYSQL_USER_PASSWORD=$(head /dev/urandom -c 512 | sha1sum | awk '// { print $1; }')
 
 # MOTD & README
 sed -i "s/{mysql_root_password}/$MYSQL_ROOT_PASSWORD/" /etc/update-motd.d/60-app-ampache
 sed -i "s/{mysql_root_password}/$MYSQL_ROOT_PASSWORD/" /root/README
 
-# Let's install Ampache and MySQL
+# Let's configure MySQL
 chmod 1777 /tmp
 update-rc.d mysql enable
 mysqladmin -u root password $MYSQL_ROOT_PASSWORD
+
+# Let's configure Ampache
+TARGET="http://localhost/install.php?action=create_db"
+
+curl -X POST \
+     -F "local_db=ampache" \
+     -F "local_host=localhost" \
+     -F "local_username=root" \
+     -F "password=${MYSQL_ROOT_PASSWORD}" \
+     -F "db_user=create_db_user" \
+     -F "db_username=ampache" \
+     -F "db_password=${MYSQL_USER_PASSWORD}" \
+     -F "overwrite_db=1" \
+     -F "existing_db=0" \
+     $TARGET
 
 # this service is only needed on the first boot so we remove it here.
 rm -f /etc/init/init-ampache.conf
